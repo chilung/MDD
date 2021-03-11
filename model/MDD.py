@@ -5,6 +5,19 @@ import torch
 import numpy as np
 
 class GradientReverseLayer(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, x):
+        return x.view_as(x)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        return grad_output.neg()
+
+# def grad_reverse(x):
+#     return GradReverse.apply(x)
+
+# This is the original version of GRL
+class GradientReverseLayer_org(torch.autograd.Function):
     def __init__(self, iter_num=0, alpha=1.0, low_value=0.0, high_value=0.1, max_iter=1000.0):
         self.iter_num = iter_num
         self.alpha = alpha
@@ -61,7 +74,8 @@ class MDDNet(nn.Module):
         features = self.base_network(inputs)
         if self.use_bottleneck:
             features = self.bottleneck_layer(features)
-        features_adv = self.grl_layer(features)
+        # features_adv = self.grl_layer(features)
+        features_adv = self.grl_layer.apply(features)
         outputs_adv = self.classifier_layer_2(features_adv)
         
         outputs = self.classifier_layer(features)
