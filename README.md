@@ -9,6 +9,9 @@
 * argparse
 * PIL
 * tqdm
+* pyyaml
+* easydict
+* sklearn
 
 ## Dataset:
 
