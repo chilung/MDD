@@ -62,12 +62,15 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
     print("start train...")
     iter_num = 0
     epoch = 0
-    total_progress_bar = tqdm.tqdm(desc='Train iter', total=max_iter)
+    # total_progress_bar = tqdm.tqdm(desc='Train iter', total=max_iter)
     while True:
-        for (datas, datat) in tqdm.tqdm(
-                zip(train_source_loader, train_target_loader),
-                total=min(len(train_source_loader), len(train_target_loader)),
-                desc='Train epoch = {}'.format(epoch), ncols=80, leave=False):
+        #for (datas, datat) in tqdm.tqdm(
+        #        zip(train_source_loader, train_target_loader),
+        #        total=min(len(train_source_loader), len(train_target_loader)),
+        #        desc='Train epoch = {}'.format(epoch), ncols=80, leave=True):
+        # for (datas, datat) in tqdm.tqdm(
+        #         zip(train_source_loader, train_target_loader)):
+        for (datas, datat) in zip(train_source_loader, train_target_loader):
             inputs_source, labels_source = datas
             inputs_target, labels_target = datat
 
@@ -88,8 +91,11 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
                 eval_result = evaluate(model_instance, test_target_loader)
                 print(eval_result)
             iter_num += 1
-            total_progress_bar.update(1)
+            # total_progress_bar.update(1)
+            
         epoch += 1
+        print('epoch: {}'.format(epoch))
+        
         if iter_num >= max_iter:
             break
     print('finish train')
@@ -117,9 +123,13 @@ if __name__ == '__main__':
 
     cfg = Config(args.config)
 
+    print('config: {}'.format(args.config))
+    print('dataset: {}'.format(args.dataset))
+    print('src_address: {}'.format(args.src_address))
+    print('tgt_address: {}'.format(args.tgt_address))
+
     source_file = args.src_address
     target_file = args.tgt_address
-
 
     if args.dataset == 'Office-31':
         class_num = 31
@@ -146,7 +156,9 @@ if __name__ == '__main__':
     test_target_loader = load_images(target_file, batch_size=32, is_train=False)
 
     param_groups = model_instance.get_parameter_list()
+    print('param_groups: {}'.format(param_groups))
     group_ratios = [group['lr'] for group in param_groups]
+    print('group_ratios: {}'.format(group_ratios))
 
 
     assert cfg.optim.type == 'sgd', 'Optimizer type not supported!'
