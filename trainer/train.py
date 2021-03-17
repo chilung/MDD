@@ -156,17 +156,16 @@ if __name__ == '__main__':
         width = -1
 
     model_instance = MDD(base_net='ResNet50', width=width, use_gpu=True, class_num=class_num, srcweight=srcweight)
-    
-    print('number of GPU: {}'.format(torch.cuda.device_count()))
+    # print('number of GPU: {}'.format(torch.cuda.device_count()))
     # if torch.cuda.device_count() > 1:
-    #    print("Let's use", torch.cuda.device_count(), "GPUs!")
-    #    model_instance = torch.nn.DataParallel(model_instance)
-
+    #     print("Let's use", torch.cuda.device_count(), "GPUs!")
+    #     model_instance = torch.nn.DataParallel(model_instance)
+    
     train_source_loader = load_images(source_file, batch_size=32, is_cen=is_cen)
     train_target_loader = load_images(target_file, batch_size=32, is_cen=is_cen)
     test_target_loader = load_images(target_file, batch_size=32, is_train=False)
 
-    param_groups = model_instance.get_parameter_list()
+    param_groups = model_instance.module.get_parameter_list()
     print('param_groups: {}'.format(param_groups))
     group_ratios = [group['lr'] for group in param_groups]
     print('group_ratios: {}'.format(group_ratios))
@@ -179,6 +178,6 @@ if __name__ == '__main__':
     lr_scheduler = INVScheduler(gamma=cfg.lr_scheduler.gamma,
                                 decay_rate=cfg.lr_scheduler.decay_rate,
                                 init_lr=cfg.init_lr)
-
+        
     train(model_instance, train_source_loader, train_target_loader, test_target_loader, group_ratios,
           max_iter=100000, optimizer=optimizer, lr_scheduler=lr_scheduler, eval_interval=500)
