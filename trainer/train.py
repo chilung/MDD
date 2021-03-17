@@ -165,7 +165,7 @@ if __name__ == '__main__':
     train_target_loader = load_images(target_file, batch_size=32, is_cen=is_cen)
     test_target_loader = load_images(target_file, batch_size=32, is_train=False)
 
-    param_groups = model_instance.module.get_parameter_list()
+    param_groups = model_instance.get_parameter_list()
     print('param_groups: {}'.format(param_groups))
     group_ratios = [group['lr'] for group in param_groups]
     print('group_ratios: {}'.format(group_ratios))
