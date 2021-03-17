@@ -54,7 +54,7 @@ def evaluate(model_instance, input_loader):
     accuracy = torch.sum(torch.squeeze(predict).float() == all_labels) / float(all_labels.size()[0])
 
     model_instance.set_train(ori_train_state)
-    return {'accuracy':accuracy}
+    return '\naccuracy: {}\n'.format(accuracy)
 
 def train(model_instance, train_source_loader, train_target_loader, test_target_loader,
           group_ratios, max_iter, optimizer, lr_scheduler, eval_interval):
@@ -94,7 +94,8 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
             # total_progress_bar.update(1)
             
         epoch += 1
-        print('epoch: {}'.format(epoch))
+        print('{} '.format(epoch), end='')
+        # print('{} '.format(epoch))
         
         if iter_num >= max_iter:
             break
@@ -172,4 +173,3 @@ if __name__ == '__main__':
 
     train(model_instance, train_source_loader, train_target_loader, test_target_loader, group_ratios,
           max_iter=100000, optimizer=optimizer, lr_scheduler=lr_scheduler, eval_interval=1000)
-

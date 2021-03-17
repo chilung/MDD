@@ -12,5 +12,4 @@ python ${PROJ_ROOT}/trainer/train.py \
     --dataset Office-31 \
     --src_address /home/ccma/MDD/data/dslr.txt \
     --tgt_address /home/ccma/MDD/data/amazon.txt \
-
-#    >> ${LOG_FILE}  2>&1
+    >> ${LOG_FILE}  2>&1
