@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 PROJ_ROOT="/home/ccma/MDD"
 PROJ_NAME="MDD"

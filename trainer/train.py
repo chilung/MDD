@@ -111,6 +111,11 @@ if __name__ == '__main__':
     from model.MDD import MDD
     from preprocess.data_provider import load_images
 
+    print('GPU is available: {}'.format(torch.cuda.is_available()))
+    print('Current Device: {}'.format(torch.cuda.current_device()))
+    print('Device Count: {}'.format(torch.cuda.device_count()))
+    print('Device Name: {}'.format(torch.cuda.get_device_name(0)))
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', type=str, help='all sets of configuration parameters',
                         default='/home/liujintao/app/transfer-lib/config/dann.yml')
@@ -151,6 +156,11 @@ if __name__ == '__main__':
         width = -1
 
     model_instance = MDD(base_net='ResNet50', width=width, use_gpu=True, class_num=class_num, srcweight=srcweight)
+    
+    print('number of GPU: {}'.format(torch.cuda.device_count()))
+    # if torch.cuda.device_count() > 1:
+    #    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    #    model_instance = torch.nn.DataParallel(model_instance)
 
     train_source_loader = load_images(source_file, batch_size=32, is_cen=is_cen)
     train_target_loader = load_images(target_file, batch_size=32, is_cen=is_cen)
@@ -160,7 +170,6 @@ if __name__ == '__main__':
     print('param_groups: {}'.format(param_groups))
     group_ratios = [group['lr'] for group in param_groups]
     print('group_ratios: {}'.format(group_ratios))
-
 
     assert cfg.optim.type == 'sgd', 'Optimizer type not supported!'
 

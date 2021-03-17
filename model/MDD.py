@@ -104,7 +104,6 @@ class MDDNet(nn.Module):
             features = self.bottleneck_layer(features)
         # features_adv = self.grl_layer(features)
         
-        
         self.backward_tensor[0] += 1
         features_adv = self.grl_layer.apply(features, self.backward_tensor)
         outputs_adv = self.classifier_layer_2(features_adv)
