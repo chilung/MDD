@@ -181,4 +181,4 @@ if __name__ == '__main__':
                                 init_lr=cfg.init_lr)
 
     train(model_instance, train_source_loader, train_target_loader, test_target_loader, group_ratios,
-          max_iter=100000, optimizer=optimizer, lr_scheduler=lr_scheduler, eval_interval=1000)
+          max_iter=100000, optimizer=optimizer, lr_scheduler=lr_scheduler, eval_interval=500)
