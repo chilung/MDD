@@ -52,9 +52,9 @@ def evaluate(model_instance, input_loader):
 
     _, predict = torch.max(all_probs, 1)
     accuracy = torch.sum(torch.squeeze(predict).float() == all_labels) / float(all_labels.size()[0])
-
+    
     model_instance.set_train(ori_train_state)
-    return '\naccuracy: {}\n'.format(accuracy)
+    return accuracy
 
 def train(model_instance, train_source_loader, train_target_loader, test_target_loader,
           group_ratios, max_iter, optimizer, lr_scheduler, eval_interval):
@@ -89,7 +89,7 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
             # val
             if iter_num % eval_interval == 0 and iter_num != 0:
                 eval_result = evaluate(model_instance, test_target_loader)
-                print(eval_result)
+                print('Accuracy: {}'.format(eval_result))
             iter_num += 1
             # total_progress_bar.update(1)
             
@@ -156,11 +156,12 @@ if __name__ == '__main__':
         width = -1
 
     model_instance = MDD(base_net='ResNet50', width=width, use_gpu=True, class_num=class_num, srcweight=srcweight)
-    # print('number of GPU: {}'.format(torch.cuda.device_count()))
-    # if torch.cuda.device_count() > 1:
-    #     print("Let's use", torch.cuda.device_count(), "GPUs!")
-    #     model_instance = torch.nn.DataParallel(model_instance)
     
+    print('number of GPU: {}'.format(torch.cuda.device_count()))
+    # if torch.cuda.device_count() > 1:
+    #    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    #    model_instance = torch.nn.DataParallel(model_instance)
+
     train_source_loader = load_images(source_file, batch_size=32, is_cen=is_cen)
     train_target_loader = load_images(target_file, batch_size=32, is_cen=is_cen)
     test_target_loader = load_images(target_file, batch_size=32, is_train=False)
@@ -178,6 +179,6 @@ if __name__ == '__main__':
     lr_scheduler = INVScheduler(gamma=cfg.lr_scheduler.gamma,
                                 decay_rate=cfg.lr_scheduler.decay_rate,
                                 init_lr=cfg.init_lr)
-        
+
     train(model_instance, train_source_loader, train_target_loader, test_target_loader, group_ratios,
           max_iter=100000, optimizer=optimizer, lr_scheduler=lr_scheduler, eval_interval=500)

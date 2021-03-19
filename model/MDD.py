@@ -24,7 +24,8 @@ class GradientReverseLayer(torch.autograd.Function):
         coeff = np.float(
             2.0 * (high_value - low_value) / (1.0 + np.exp(-alpha * iter_num / max_iter)) - (
                         high_value - low_value) + low_value)
-        # print('coeff = {}, iter_num = {}, alpha = {}, low_value = {}, high_value = {}, max_iter = {}'.format(coeff, iter_num, alpha, low_value, high_value, max_iter))
+        print('coeff = {}, iter_num = {}, alpha = {}, low_value = {}, high_value = {}, max_iter = {}'.format(coeff, iter_num, alpha, low_value, high_value, max_iter))
+        
         return -coeff * grad_output, None
 
 class GradientReverseLayer_ver1(torch.autograd.Function):
@@ -139,7 +140,11 @@ class MDD(object):
 
         classifier_loss_adv_src = class_criterion(outputs_adv.narrow(0, 0, labels_source.size(0)), target_adv_src)
 
-        logloss_tgt = torch.log(1 - F.softmax(outputs_adv.narrow(0, labels_source.size(0), inputs.size(0) - labels_source.size(0)), dim = 1))
+        # logloss_tgt = torch.log(
+        #     1 - F.softmax(outputs_adv.narrow(0, labels_source.size(0), inputs.size(0) - labels_source.size(0)), dim = 1))
+        logloss_tgt = torch.log(torch.clamp(
+            1 - F.softmax(outputs_adv.narrow(0, labels_source.size(0), inputs.size(0) - labels_source.size(0)), dim = 1), min=1e-15))
+        
         classifier_loss_adv_tgt = F.nll_loss(logloss_tgt, target_adv_tgt)
 
         transfer_loss = self.srcweight * classifier_loss_adv_src + classifier_loss_adv_tgt
