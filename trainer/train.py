@@ -91,10 +91,11 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
                 eval_result = evaluate(model_instance, test_target_loader)
                 print('Accuracy: {}'.format(eval_result))
             iter_num += 1
+            print('{} '.format(iter_num), end='')
             # total_progress_bar.update(1)
             
         epoch += 1
-        print('{} '.format(epoch), end='')
+        print('(epoch {}) '.format(epoch), end='')
         # print('{} '.format(epoch))
         
         if iter_num >= max_iter:

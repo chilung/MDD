@@ -24,7 +24,7 @@ class GradientReverseLayer(torch.autograd.Function):
         coeff = np.float(
             2.0 * (high_value - low_value) / (1.0 + np.exp(-alpha * iter_num / max_iter)) - (
                         high_value - low_value) + low_value)
-        print('coeff = {}, iter_num = {}, alpha = {}, low_value = {}, high_value = {}, max_iter = {}'.format(coeff, iter_num, alpha, low_value, high_value, max_iter))
+        # print('coeff = {}, iter_num = {}, alpha = {}, low_value = {}, high_value = {}, max_iter = {}'.format(coeff, iter_num, alpha, low_value, high_value, max_iter))
         
         return -coeff * grad_output, None
 
