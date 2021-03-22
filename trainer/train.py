@@ -89,7 +89,7 @@ def train(model_instance, train_source_loader, train_target_loader, test_target_
             # val
             if iter_num % eval_interval == 0 and iter_num != 0:
                 eval_result = evaluate(model_instance, test_target_loader)
-                print('Accuracy: {}'.format(eval_result))
+                print('\nAccuracy: {}'.format(eval_result))
             iter_num += 1
             print('{} '.format(iter_num), end='')
             # total_progress_bar.update(1)
