@@ -36,3 +36,7 @@ If you use this code for your research, please consider citing:
 ```
 ## Contact
 If you have any problem about our code, feel free to contact zhangyuc17@mails.tsinghua.edu.cn.
+
+## Study Progress
+train.py: 105 def train_batch: 107 model_instance.get_loss
+MDD.py: class MDD: get_loss
