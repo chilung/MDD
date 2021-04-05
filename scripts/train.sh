@@ -22,4 +22,4 @@ python ${PROJ_ROOT}/trainer/train.py \
     --dataset Office-31 \
     --src_address $HOME/MDD/data/$src.txt \
     --tgt_address $HOME/MDD/data/$tgt.txt \
-    >> ${LOG_FILE}  2>&1
+#     >> ${LOG_FILE}  2>&1

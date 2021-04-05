@@ -30,8 +30,12 @@ def evaluate(model_instance, input_loader):
 
     for i in range(num_iter):
         data = iter_test.next()
+        
         inputs = data[0]
         labels = data[1]
+        print('predict inputs dim: {}'.format(inputs.size(0)))
+        print('predict labels dim: {}'.format(labels.size(0)))
+
         if model_instance.use_gpu:
             inputs = Variable(inputs.cuda())
             labels = Variable(labels.cuda())

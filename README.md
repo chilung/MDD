@@ -41,4 +41,15 @@ If you have any problem about our code, feel free to contact zhangyuc17@mails.ts
 ```
 train.py: 105 def train_batch: 107 model_instance.get_loss
 MDD.py: class MDD: get_loss
+labels_source:32, input:64, outputs:64, outputs_adv:64
+
+outputs.src -------> classifier_loss <------- labels_source
+outputs_adv.src -------> classifier_loss_adv_src <------- outputs->target_adv.src
+outputs_adv.tgt -------> classifier_loss_adv_tgt <------- outputs->target_adv.tgt
+transfer_loss = weight*classifier_loss_adv_src + classifier_loss_adv_tgt
+total_loss = classifier_loss + transfer_loss
+
+forward:
+fearutes --> (classifier_layer) --> outputs --> (softmax) --> softmax_outputs
+         \-> (grl_layer) --> features_adv --> (classifier_layer_2) --> outputs_adv
 ```

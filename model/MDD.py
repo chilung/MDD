@@ -105,13 +105,19 @@ class MDDNet(nn.Module):
             features = self.bottleneck_layer(features)
         # features_adv = self.grl_layer(features)
         
-        self.backward_tensor[0] += 1
+        self.backward_tensor[0] += 1  # iter_num
         features_adv = self.grl_layer.apply(features, self.backward_tensor)
         outputs_adv = self.classifier_layer_2(features_adv)
         
         outputs = self.classifier_layer(features)
         softmax_outputs = self.softmax(outputs)
 
+        print('===forward===')
+        print('features dim: {}'.format(features.size(0)))
+        print('outputs dim: {}'.format(outputs.size(0)))
+        print('softmax_outputs dim: {}'.format(softmax_outputs.size(0)))
+        print('outputs_adv dim: {}'.format(outputs_adv.size(0)))
+        print('===forward===')
         return features, outputs, softmax_outputs, outputs_adv
 
 class MDD(object):
@@ -132,6 +138,11 @@ class MDD(object):
 
         _, outputs, _, outputs_adv = self.c_net(inputs)
 
+        print('inputs dim: {}'.format(inputs.size(0)))
+        print('outputs dim: {}'.format(outputs.size(0)))
+        print('outputs_adv dim: {}'.format(outputs_adv.size(0)))
+        print('labels_source dim: {}'.format(labels_source.size(0)))
+        print('labels_source dim: {} labels_source: {}'.format(labels_source.size(0), labels_source))
         classifier_loss = class_criterion(outputs.narrow(0, 0, labels_source.size(0)), labels_source)
 
         target_adv = outputs.max(1)[1]
