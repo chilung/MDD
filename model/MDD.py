@@ -158,10 +158,10 @@ class MDD(object):
         
         classifier_loss_adv_tgt = F.nll_loss(logloss_tgt, target_adv_tgt)
 
+        print('classifier_loss_adv_src: {}, classifier_loss_adv_tgt: {}'.format(classifier_loss_adv_src, classifier_loss_adv_tgt))
         transfer_loss = self.srcweight * classifier_loss_adv_src + classifier_loss_adv_tgt
 
         self.iter_num += 1
-
         total_loss = classifier_loss + transfer_loss
 
         return total_loss
